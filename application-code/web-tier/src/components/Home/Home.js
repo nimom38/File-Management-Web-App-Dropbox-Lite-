@@ -5,7 +5,7 @@ function Home({ user }) {
   const history = useHistory();
 
   if (!user) {
-    history.push("/login");
+    history.push("/signin");
   }
 
   return <div>{user?.name}</div>;
