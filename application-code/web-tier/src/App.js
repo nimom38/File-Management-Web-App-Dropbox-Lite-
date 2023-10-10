@@ -3,9 +3,10 @@ import Home from "./components/Home/Home";
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import { useLocalStorage } from "./useLocalStorage";
 
 function App() {
-  const [user, setUser] = useState({ name: "asd" });
+  const [user, setUser] = useLocalStorage("User", { name: "asd" });
 
   return (
     <div>
