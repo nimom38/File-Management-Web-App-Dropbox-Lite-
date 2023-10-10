@@ -1,7 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 function Home({ user }) {
-  return <div>{user.name}</div>;
+  const history = useHistory();
+
+  if (!user) {
+    history.push("/login");
+  }
+
+  return <div>{user?.name}</div>;
 }
 
 export default Home;
