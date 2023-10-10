@@ -5,6 +5,8 @@ const cors = require("cors");
 const os = require("os");
 const fetch = require("node-fetch");
 
+const userRoute = require("./routes/user");
+
 const app = express();
 const port = 4000;
 
@@ -14,6 +16,9 @@ app.use(cors());
 
 // ROUTES FOR OUR API
 // =======================================================
+
+//User
+app.use("/user", userRoute);
 
 //Health Checking
 app.get("/health", (req, res) => {
