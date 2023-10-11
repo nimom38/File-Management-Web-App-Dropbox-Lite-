@@ -1,13 +1,31 @@
+import { useState } from "react";
+
 import "./FileCard.css";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import axios from "axios";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
 
 import moment from "moment";
 
 function FileCard({ file, setFileList, isAdmin, user }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
   const onDelete = () => {
     axios
       .delete("http://localhost:4000/file/delete", {
@@ -26,8 +44,86 @@ function FileCard({ file, setFileList, isAdmin, user }) {
       });
   };
 
+  const handleSubmitEdit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    axios
+      .put(
+        "http://localhost:4000/file/update",
+        {
+          userId: user.id,
+          username: user.username,
+          token: user.token,
+          description: data.get("description"),
+          file: data.get("myfile"),
+          fileId: file.fileURL,
+          fileName: file.fileName,
+        },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      )
+      .then((res) => {
+        setFileList(res.data);
+        setModalOpen(false);
+      })
+      .catch(function (err) {
+        console.log(err);
+        setModalOpen(false);
+      });
+  };
+
   return (
     <div className="FileCard">
+      <Modal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+        }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          component="form"
+          sx={style}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmitEdit}
+        >
+          <TextField
+            fullWidth
+            id="description"
+            label="Description"
+            name="description"
+            placeholder="Add Description"
+            defaultValue={file.description}
+            multiline
+          />
+          <br />
+          <br />
+
+          <label for="myfile">Select a new different file? </label>
+          <input type="file" id="myfile" name="myfile" />
+
+          <br />
+          <br />
+
+          <div className="FileCard__modal__buttons">
+            <div className="FileCard__modal__close">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setModalOpen(false);
+                }}
+              >
+                Close
+              </Button>
+            </div>
+            <Button variant="contained" type="submit">
+              Initiate Update
+            </Button>
+          </div>
+        </Box>
+      </Modal>
       <Box
         sx={{
           maxWidth: "100%",
@@ -68,7 +164,14 @@ function FileCard({ file, setFileList, isAdmin, user }) {
               Delete
             </Button>
           </div>
-          <Button variant="contained">EDIT</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            EDIT
+          </Button>
         </div>
       </Box>
     </div>

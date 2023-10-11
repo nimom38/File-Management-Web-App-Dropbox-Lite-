@@ -101,8 +101,51 @@ async function deleteFile(req, res) {
   }
 }
 
+async function updateFile(req, res) {
+  const file = req.file;
+
+  const description = req.body.description;
+  const uploaderId = req.body.userId;
+  const username = req.body.username;
+  const fileName = req.body.fileId;
+  const fileOriginalName = file?.originalname;
+
+  const fileBuffer = file?.buffer;
+  const uploadParams = {
+    Bucket: bucketName,
+    Body: fileBuffer,
+    Key: fileName,
+    ContentType: file?.mimetype,
+  };
+
+  try {
+    if (fileBuffer) {
+      await s3Client.send(new PutObjectCommand(uploadParams));
+    }
+    const fileData = {
+      fileURL: fileName,
+      description: description,
+      userId: uploaderId,
+      fileName: fileOriginalName,
+    };
+
+    models.File.update(fileData, { where: { fileURL: fileName } }).then(
+      (result) => {
+        getFiles(res, username, uploaderId);
+      }
+    );
+  } catch (err) {
+    res.status(500).json({ message: "something went wrong!" });
+  }
+}
+
 async function uploadFile(req, res) {
   const file = req.file;
+
+  if (!file) {
+    res.status(500).json({ message: "Please select a file" });
+  }
+
   const description = req.body.description;
   const uploaderId = req.body.userId;
   const username = req.body.username;
@@ -140,4 +183,5 @@ module.exports = {
   uploadFile: uploadFile,
   getFileList: getFileList,
   deleteFile: deleteFile,
+  updateFile: updateFile,
 };
