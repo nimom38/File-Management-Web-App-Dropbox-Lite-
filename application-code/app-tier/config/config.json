@@ -1,23 +1,35 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "admin",
+    "password": "admin123",
+    "database": "webappdb",
+    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "port": 3306,
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": "Amazon RDS"
+    }
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "admin",
+    "password": "admin123",
+    "database": "webappdb",
+    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "port": 3306,
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": "Amazon RDS"
+    }
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": "admin",
+    "password": "admin123",
+    "database": "webappdb",
+    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "port": 3306,
+    "dialect": "mysql",
+    "dialectOptions": {
+      "ssl": "Amazon RDS"
+    }
   }
 }
