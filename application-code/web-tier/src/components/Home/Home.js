@@ -8,7 +8,7 @@ function Home({ user }) {
     history.push("/signin");
   }
 
-  return <div>{user?.name}</div>;
+  return <div>Welcome {user?.username}</div>;
 }
 
 export default Home;

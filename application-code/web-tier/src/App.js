@@ -12,13 +12,13 @@ function App() {
     <div>
       <Router>
         <Switch>
-          <Route path="/signin">
+          <Route exact path="/signin">
             <SignIn />
           </Route>
-          <Route path="/signup">
-            <SignUp />
+          <Route exact path="/signup">
+            <SignUp user={user} setUser={setUser} />
           </Route>
-          <Route path="/">
+          <Route exact path="/">
             <Home user={user} />
           </Route>
         </Switch>
