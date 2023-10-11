@@ -1,4 +1,9 @@
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const crypto = require("crypto");
 const models = require("../models");
 
@@ -21,14 +26,38 @@ const generateFileName = (bytes = 32) =>
 
 const getFiles = (res, username, userId) => {
   if (username === "superAdminUser") {
-    models.findAll().then((files) => {
+    models.findAll().then(async (files) => {
+      for (let file of files) {
+        // For each file, generate a signed URL and save it to the file object
+        file.dataValues.downloadLink = await getSignedUrl(
+          s3Client,
+          new GetObjectCommand({
+            Bucket: bucketName,
+            Key: file.fileURL,
+          }),
+          { expiresIn: 60 } // 60 seconds
+        );
+      }
+
       res.status(200).json({
         message: "success upload",
         files: files,
       });
     });
   } else {
-    models.File.findAll({ where: { userId: userId } }).then((files) => {
+    models.File.findAll({ where: { userId: userId } }).then(async (files) => {
+      for (let file of files) {
+        // For each file, generate a signed URL and save it to the file object
+        file.dataValues.downloadLink = await getSignedUrl(
+          s3Client,
+          new GetObjectCommand({
+            Bucket: bucketName,
+            Key: file.fileURL,
+          }),
+          { expiresIn: 60 } // 60 seconds
+        );
+      }
+
       res.status(200).json({
         message: "success upload",
         files: files,
@@ -51,11 +80,8 @@ async function uploadFile(req, res) {
   const uploaderId = req.body.userId;
   const username = req.body.username;
 
-  console.log("file", file);
-
   const fileBuffer = file.buffer;
   const fileOriginalName = file.originalname;
-  console.log("fileOriginalName", fileOriginalName, typeof fileOriginalName);
   const fileName = generateFileName();
   const uploadParams = {
     Bucket: bucketName,

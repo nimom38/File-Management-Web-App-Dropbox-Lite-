@@ -1,11 +1,8 @@
 import "./FileList.css";
+import FileCard from "../FileCard/FileCard";
 
 function FileList({ user, fileList }) {
-  {
-    fileList?.files?.map((file) => {
-      console.log(file.id);
-    });
-  }
+  console.log("file", fileList);
   return (
     <div className="FileList">
       <h1>
@@ -14,7 +11,12 @@ function FileList({ user, fileList }) {
       <br />
 
       {fileList?.files?.map((file) => {
-        return <p>{file.id}</p>;
+        return (
+          <FileCard
+            file={file}
+            isAdmin={user?.username === "superAdminUser" ? true : false}
+          />
+        );
       })}
     </div>
   );

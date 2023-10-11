@@ -33,7 +33,7 @@ function Home({ user, setUser }) {
           setFileList([]);
         });
     }
-  }, [user, user.id, user.token, user.username]);
+  }, [user, user?.id, user?.token, user?.username]);
 
   if (!user) {
     history.push("/signin");
@@ -72,7 +72,7 @@ function Home({ user, setUser }) {
         { headers: { "Content-Type": "multipart/form-data" } }
       )
       .then(function (res) {
-        console.log("successful upload!");
+        setFileList(res.data);
         setModalOpen(false);
       })
       .catch(function (err) {
@@ -139,23 +139,31 @@ function Home({ user, setUser }) {
           <p>Username: {user?.username}</p>
           <p>
             Account Type:{" "}
-            {user?.username === "superAdminUser" ? "Admin User" : "Normal User"}
+            {user?.username === "superAdminUser"
+              ? "Admin User"
+              : "Non Admin User"}
           </p>
         </div>
 
         <br />
         <h3>Actions</h3>
-        <Button className="Home__logout" variant="contained" onClick={signOut}>
-          Logout
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        >
-          Upload File
-        </Button>
+        <div className="Home__buttons">
+          <div className="Home__logout">
+            <Button variant="contained" onClick={signOut}>
+              Logout
+            </Button>
+          </div>
+
+          <Button
+            className="Home__upload"
+            variant="contained"
+            onClick={() => {
+              setModalOpen(true);
+            }}
+          >
+            Upload File
+          </Button>
+        </div>
       </div>
 
       <div className="Home__files">
