@@ -27,7 +27,7 @@ function Home({ user, setUser }) {
           },
         })
         .then((list) => {
-          setFileList(list);
+          setFileList(list.data);
         })
         .catch((err) => {
           setFileList([]);

@@ -1,8 +1,11 @@
 import "./FileList.css";
 
 function FileList({ user, fileList }) {
-  console.log("file", fileList);
-
+  {
+    fileList?.files?.map((file) => {
+      console.log(file.id);
+    });
+  }
   return (
     <div className="FileList">
       <h1>
@@ -10,7 +13,7 @@ function FileList({ user, fileList }) {
       </h1>
       <br />
 
-      {fileList?.map((file) => {
+      {fileList?.files?.map((file) => {
         return <p>{file.id}</p>;
       })}
     </div>

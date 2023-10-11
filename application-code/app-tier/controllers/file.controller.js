@@ -51,8 +51,11 @@ async function uploadFile(req, res) {
   const uploaderId = req.body.userId;
   const username = req.body.username;
 
-  const fileBuffer = file.buffer;
+  console.log("file", file);
 
+  const fileBuffer = file.buffer;
+  const fileOriginalName = file.originalname;
+  console.log("fileOriginalName", fileOriginalName, typeof fileOriginalName);
   const fileName = generateFileName();
   const uploadParams = {
     Bucket: bucketName,
@@ -69,6 +72,7 @@ async function uploadFile(req, res) {
       fileURL: fileName,
       description: description,
       userId: uploaderId,
+      fileName: fileOriginalName,
     };
 
     models.File.create(fileData).then((result) => {
