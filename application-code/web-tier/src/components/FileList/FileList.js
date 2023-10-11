@@ -1,7 +1,7 @@
 import "./FileList.css";
 import FileCard from "../FileCard/FileCard";
 
-function FileList({ user, fileList }) {
+function FileList({ user, fileList, setFileList }) {
   console.log("file", fileList);
   return (
     <div className="FileList">
@@ -14,7 +14,9 @@ function FileList({ user, fileList }) {
         return (
           <FileCard
             file={file}
+            setFileList={setFileList}
             isAdmin={user?.username === "superAdminUser" ? true : false}
+            user={user}
           />
         );
       })}

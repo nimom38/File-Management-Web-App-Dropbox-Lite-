@@ -2,6 +2,7 @@ const {
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
+  DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const crypto = require("crypto");
@@ -74,6 +75,32 @@ async function getFileList(req, res) {
   getFiles(res, username, userId);
 }
 
+async function deleteFile(req, res) {
+  const userId = req.query.userId;
+  const username = req.query.username;
+  const token = req.query.token;
+  const fileName = req.query.fileId;
+
+  const deleteParams = {
+    Bucket: bucketName,
+    Key: fileName,
+  };
+
+  try {
+    await s3Client.send(new DeleteObjectCommand(deleteParams));
+
+    models.File.destroy({ where: { fileURL: fileName } })
+      .then(() => {
+        getFiles(res, username, userId);
+      })
+      .catch((err) => {
+        throw err;
+      });
+  } catch (err) {
+    res.status(500).json({ message: "something went wrong!" });
+  }
+}
+
 async function uploadFile(req, res) {
   const file = req.file;
   const description = req.body.description;
@@ -112,4 +139,5 @@ async function uploadFile(req, res) {
 module.exports = {
   uploadFile: uploadFile,
   getFileList: getFileList,
+  deleteFile: deleteFile,
 };

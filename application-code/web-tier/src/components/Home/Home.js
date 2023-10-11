@@ -167,7 +167,7 @@ function Home({ user, setUser }) {
       </div>
 
       <div className="Home__files">
-        <FileList user={user} fileList={fileList} />
+        <FileList user={user} fileList={fileList} setFileList={setFileList} />
       </div>
     </div>
   );
