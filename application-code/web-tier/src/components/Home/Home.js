@@ -23,6 +23,8 @@ function Home({ user, setUser }) {
     setUser(null);
   };
 
+  console.log("SADDAS", user);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -43,11 +45,16 @@ function Home({ user, setUser }) {
     console.log("file", data.get("myfile"));
 
     axios
-      .post("http://localhost:4000/upload-file", {
-        userId: user.id,
-        description: data.get("description"),
-        file: data.get("myfile"),
-      })
+      .post(
+        "http://localhost:4000/file/upload",
+        {
+          userId: user.id,
+          username: user.username,
+          description: data.get("description"),
+          file: data.get("myfile"),
+        },
+        { headers: { "Content-Type": "multipart/form-data" } }
+      )
       .then(function (res) {
         console.log("successful upload!");
       })

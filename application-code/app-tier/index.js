@@ -6,6 +6,7 @@ const os = require("os");
 const fetch = require("node-fetch");
 
 const userRoute = require("./routes/user");
+const fileRoute = require("./routes/file");
 
 const app = express();
 const port = 4000;
@@ -19,6 +20,9 @@ app.use(cors());
 
 //User
 app.use("/user", userRoute);
+
+//File
+app.use("/file", fileRoute);
 
 //Health Checking
 app.get("/health", (req, res) => {
