@@ -57,6 +57,54 @@ function signUp(req, res) {
     });
 }
 
+function login(req, res) {
+  models.User.findOne({ where: { username: req.body.username } })
+    .then((user) => {
+      if (user === null) {
+        res.status(401).json({
+          message: "Invalid credentials!",
+        });
+      } else {
+        bcryptjs.compare(
+          req.body.password,
+          user.password,
+          function (err, result) {
+            if (result) {
+              const token = jwt.sign(
+                {
+                  username: user.username,
+                  userId: user.id,
+                },
+                "secret",
+                function (err, token) {
+                  const userData = {
+                    ...result.dataValues,
+                    token: token,
+                  };
+                  delete userData.password;
+                  res.status(200).json({
+                    message: "Authentication successful!",
+                    user: userData,
+                  });
+                }
+              );
+            } else {
+              res.status(401).json({
+                message: "Invalid credentials!",
+              });
+            }
+          }
+        );
+      }
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Something went wrong!",
+      });
+    });
+}
+
 module.exports = {
   signUp: signUp,
+  login: login,
 };
