@@ -19,7 +19,7 @@ function App() {
             <SignUp user={user} setUser={setUser} />
           </Route>
           <Route exact path="/">
-            <Home user={user} />
+            <Home user={user} setUser={setUser} />
           </Route>
         </Switch>
       </Router>

@@ -1,0 +1,26 @@
+.Home {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: aqua;
+}
+
+.Home__userProfile {
+  padding-left: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 30%;
+  background-color: gray;
+}
+
+.Home__userProfile_info {
+  padding-left: 10px;
+}
+
+.Home__logout {
+  margin-right: 20px;
+}
