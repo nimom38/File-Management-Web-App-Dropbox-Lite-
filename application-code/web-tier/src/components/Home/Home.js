@@ -115,18 +115,21 @@ function Home({ user, setUser }) {
           <br />
           <br />
 
-          <Button
-            className="Home__logout"
-            variant="contained"
-            onClick={() => {
-              setModalOpen(false);
-            }}
-          >
-            Close
-          </Button>
-          <Button variant="contained" type="submit">
-            Initiate Upload
-          </Button>
+          <div className="Home__modal__buttons">
+            <div className="Home__logout">
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setModalOpen(false);
+                }}
+              >
+                Close
+              </Button>
+            </div>
+            <Button variant="contained" type="submit">
+              Initiate Upload
+            </Button>
+          </div>
         </Box>
       </Modal>
       <div className="Home__userProfile">

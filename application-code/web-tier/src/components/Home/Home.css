@@ -37,3 +37,7 @@
   width: 70%;
   background-color: bisque;
 }
+
+.Home__modal__buttons {
+  display: flex;
+}
