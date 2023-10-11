@@ -78,7 +78,7 @@ function login(req, res) {
                 "secret",
                 function (err, token) {
                   const userData = {
-                    ...result.dataValues,
+                    ...user.dataValues,
                     token: token,
                   };
                   delete userData.password;

@@ -38,12 +38,14 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignUp({ user, setUser }) {
+export default function SignUp({ setUser }) {
   const history = useHistory();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    console.log("data up", data);
 
     axios
       .post("http://localhost:4000/user/sign-up", {

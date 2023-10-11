@@ -13,7 +13,7 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/signin">
-            <SignIn />
+            <SignIn user={user} setUser={setUser} />
           </Route>
           <Route exact path="/signup">
             <SignUp user={user} setUser={setUser} />
