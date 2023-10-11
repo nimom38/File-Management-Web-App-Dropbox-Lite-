@@ -37,6 +37,14 @@ const getFiles = (res, username, userId) => {
   }
 };
 
+async function getFileList(req, res) {
+  const userId = req.query.userId;
+  const username = req.query.username;
+  const token = req.query.token;
+
+  getFiles(res, username, userId);
+}
+
 async function uploadFile(req, res) {
   const file = req.file;
   const description = req.body.description;
@@ -73,4 +81,5 @@ async function uploadFile(req, res) {
 
 module.exports = {
   uploadFile: uploadFile,
+  getFileList: getFileList,
 };

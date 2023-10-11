@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import "./Home.css";
 import Typography from "@mui/material/Typography";
@@ -14,6 +14,26 @@ import axios from "axios";
 function Home({ user, setUser }) {
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
+  const [fileList, setFileList] = useState([]);
+
+  useEffect(() => {
+    if (user) {
+      axios
+        .get("http://localhost:4000/file/list", {
+          params: {
+            userId: user.id,
+            username: user.username,
+            token: user.token,
+          },
+        })
+        .then((list) => {
+          setFileList(list);
+        })
+        .catch((err) => {
+          setFileList([]);
+        });
+    }
+  }, [user, user.id, user.token, user.username]);
 
   if (!user) {
     history.push("/signin");
@@ -22,8 +42,6 @@ function Home({ user, setUser }) {
   const signOut = () => {
     setUser(null);
   };
-
-  console.log("SADDAS", user);
 
   const style = {
     position: "absolute",
@@ -41,15 +59,13 @@ function Home({ user, setUser }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log("description", data.get("description"));
-    console.log("file", data.get("myfile"));
-
     axios
       .post(
         "http://localhost:4000/file/upload",
         {
           userId: user.id,
           username: user.username,
+          token: user.token,
           description: data.get("description"),
           file: data.get("myfile"),
         },
@@ -57,9 +73,11 @@ function Home({ user, setUser }) {
       )
       .then(function (res) {
         console.log("successful upload!");
+        setModalOpen(false);
       })
       .catch(function (err) {
         console.log(err);
+        setModalOpen(false);
       });
   };
 
@@ -141,7 +159,7 @@ function Home({ user, setUser }) {
       </div>
 
       <div className="Home__files">
-        <FileList user={user} />
+        <FileList user={user} fileList={fileList} />
       </div>
     </div>
   );
