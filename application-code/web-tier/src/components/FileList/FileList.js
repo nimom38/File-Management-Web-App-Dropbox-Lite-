@@ -10,7 +10,7 @@ function FileList({ user, fileList, setFileList }) {
       </h1>
       <br />
 
-      {fileList?.files?.map((file) => {
+      {fileList?.files?.toReversed().map((file) => {
         return (
           <FileCard
             file={file}

@@ -147,7 +147,7 @@ function FileCard({ file, setFileList, isAdmin, user }) {
           Created at: {moment(file.createdAt).format("MMMM Do YYYY, h:mm:ss a")}{" "}
           &nbsp;| &nbsp;Updated at:{" "}
           {moment(file.updatedAt).format("MMMM Do YYYY, h:mm:ss a")} &nbsp;|
-          &nbsp;{isAdmin ? "File Owner:" + file.username : ""}
+          &nbsp;{isAdmin ? "File Owner:  " + file.username : ""}
         </Typography>
 
         <br />
