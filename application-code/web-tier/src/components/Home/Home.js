@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import "./Home.css";
 import Typography from "@mui/material/Typography";
 import { Button } from "@mui/material";
+import FileList from "../FileList/FileList";
 
 function Home({ user, setUser }) {
   const history = useHistory();
@@ -37,6 +38,10 @@ function Home({ user, setUser }) {
           Logout
         </Button>
         <Button variant="contained">Upload File</Button>
+      </div>
+
+      <div className="Home__files">
+        <FileList user={user} />
       </div>
     </div>
   );
