@@ -11,8 +11,13 @@ import TextField from "@mui/material/TextField";
 
 import moment from "moment";
 import jwt_decode from "jwt-decode";
+import Snackbar from "@mui/material/Snackbar";
 
 function FileCard({ file, setFileList, isAdmin, user, setUser }) {
+  const [openSnackbar, setOpenSnackbar] = useState({
+    toggle: false,
+    message: "",
+  });
   if (user) {
     const decodedToken = jwt_decode(user?.token);
     const currentDate = new Date();
@@ -56,10 +61,11 @@ function FileCard({ file, setFileList, isAdmin, user, setUser }) {
         },
       })
       .then((res) => {
+        setOpenSnackbar({ message: "Delete Success!", toggle: true });
         setFileList(res.data);
       })
       .catch((err) => {
-        console.log("deletion failed");
+        setOpenSnackbar({ message: "Delete Failed!", toggle: true });
       });
   };
 
@@ -82,17 +88,27 @@ function FileCard({ file, setFileList, isAdmin, user, setUser }) {
         { headers: { "Content-Type": "multipart/form-data" } }
       )
       .then((res) => {
+        setOpenSnackbar({ message: "Update Success!", toggle: true });
         setFileList(res.data);
         setModalOpen(false);
       })
       .catch(function (err) {
-        console.log(err);
+        setOpenSnackbar({ message: "Update Failed!", toggle: true });
         setModalOpen(false);
       });
   };
 
   return (
     <div className="FileCard">
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={openSnackbar.toggle}
+        onClose={() => {
+          setOpenSnackbar({ message: "", toggle: false });
+        }}
+        autoHideDuration={2000}
+        message={openSnackbar.message}
+      />
       <Modal
         open={modalOpen}
         onClose={() => {

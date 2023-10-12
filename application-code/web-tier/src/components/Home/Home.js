@@ -12,10 +12,16 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
+import Snackbar from "@mui/material/Snackbar";
+
 function Home({ user, setUser }) {
   const history = useHistory();
   const [modalOpen, setModalOpen] = useState(false);
   const [fileList, setFileList] = useState([]);
+  const [openSnackbar, setOpenSnackbar] = useState({
+    toggle: false,
+    message: "",
+  });
 
   useEffect(() => {
     if (user) {
@@ -69,6 +75,11 @@ function Home({ user, setUser }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    if (!data.get("myfile").name) {
+      setOpenSnackbar({ message: "must choose a file!", toggle: true });
+      return;
+    }
+
     axios
       .post(
         "http://localhost:4000/file/upload",
@@ -82,17 +93,27 @@ function Home({ user, setUser }) {
         { headers: { "Content-Type": "multipart/form-data" } }
       )
       .then(function (res) {
+        setOpenSnackbar({ message: "upload success!", toggle: true });
         setFileList(res.data);
         setModalOpen(false);
       })
       .catch(function (err) {
-        console.log(err);
+        setOpenSnackbar({ message: "upload failed!", toggle: true });
         setModalOpen(false);
       });
   };
 
   return (
     <div className="Home">
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={openSnackbar.toggle}
+        onClose={() => {
+          setOpenSnackbar({ message: "", toggle: false });
+        }}
+        autoHideDuration={2000}
+        message={openSnackbar.message}
+      />
       <Modal
         open={modalOpen}
         onClose={() => {

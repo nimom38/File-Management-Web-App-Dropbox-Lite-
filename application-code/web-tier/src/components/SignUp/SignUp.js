@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SignIn from "../SignIn/SignIn";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
 
 function Copyright(props) {
   return (
@@ -40,12 +41,26 @@ const defaultTheme = createTheme();
 
 export default function SignUp({ setUser }) {
   const history = useHistory();
+  const [openSnackbar, setOpenSnackbar] = useState({
+    toggle: false,
+    message: "",
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log("data up", data);
+    if (
+      !data.get("username") ||
+      !data.get("password") ||
+      !data.get("firstName")
+    ) {
+      setOpenSnackbar({
+        message: `username or password or first name can't be empty`,
+        toggle: true,
+      });
+      return;
+    }
 
     axios
       .post("http://localhost:4000/user/sign-up", {
@@ -59,13 +74,22 @@ export default function SignUp({ setUser }) {
         history.push("/");
       })
       .catch(function (err) {
-        console.log(err);
+        setOpenSnackbar({ message: "username exists", toggle: true });
       });
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={openSnackbar.toggle}
+          onClose={() => {
+            setOpenSnackbar({ message: "", toggle: false });
+          }}
+          autoHideDuration={2000}
+          message={openSnackbar.message}
+        />
         <CssBaseline />
         <Box
           sx={{
