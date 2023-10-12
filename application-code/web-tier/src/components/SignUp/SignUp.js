@@ -63,7 +63,7 @@ export default function SignUp({ setUser }) {
     }
 
     axios
-      .post("http://localhost:4000/user/sign-up", {
+      .post("/api/user/sign-up", {
         username: data.get("username"),
         password: data.get("password"),
         firstName: data.get("firstName"),

@@ -26,7 +26,7 @@ function Home({ user, setUser }) {
   useEffect(() => {
     if (user) {
       axios
-        .get("http://localhost:4000/file/list", {
+        .get("/api/file/list", {
           params: {
             userId: user.id,
             username: user.username,
@@ -82,7 +82,7 @@ function Home({ user, setUser }) {
 
     axios
       .post(
-        "http://localhost:4000/file/upload",
+        "/api/file/upload",
         {
           userId: user.id,
           username: user.username,

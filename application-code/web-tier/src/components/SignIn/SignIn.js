@@ -58,7 +58,7 @@ export default function SignIn({ setUser }) {
     }
 
     axios
-      .post("http://localhost:4000/user/sign-in", {
+      .post("/api/user/sign-in", {
         username: data.get("username"),
         password: data.get("password"),
       })

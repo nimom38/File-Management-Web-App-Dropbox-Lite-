@@ -52,7 +52,7 @@ function FileCard({ file, setFileList, isAdmin, user, setUser }) {
     }
 
     axios
-      .delete("http://localhost:4000/file/delete", {
+      .delete("/api/file/delete", {
         params: {
           userId: user.id,
           username: user.username,
@@ -75,7 +75,7 @@ function FileCard({ file, setFileList, isAdmin, user, setUser }) {
 
     axios
       .put(
-        "http://localhost:4000/file/update",
+        "/api/file/update",
         {
           userId: user.id,
           username: user.username,
