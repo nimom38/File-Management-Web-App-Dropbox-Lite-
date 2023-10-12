@@ -3,7 +3,7 @@
     "username": "admin",
     "password": "admin123",
     "database": "webappdb",
-    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "host": "database-1.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
     "port": 3306,
     "dialect": "mysql",
     "dialectOptions": {
@@ -14,7 +14,7 @@
     "username": "admin",
     "password": "admin123",
     "database": "webappdb",
-    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "host": "database-1.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
     "port": 3306,
     "dialect": "mysql",
     "dialectOptions": {
@@ -25,7 +25,7 @@
     "username": "admin",
     "password": "admin123",
     "database": "webappdb",
-    "host": "database-3-experiment.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
+    "host": "database-1.cayq6mvyhh3r.us-west-1.rds.amazonaws.com",
     "port": 3306,
     "dialect": "mysql",
     "dialectOptions": {
