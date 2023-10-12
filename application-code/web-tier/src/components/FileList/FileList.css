@@ -8,3 +8,17 @@
   padding-left: 30px;
   overflow-y: auto;
 }
+
+.FileList__header {
+  display: flex;
+  align-items: center;
+}
+
+.FileList__header__title {
+  margin-right: 500px;
+}
+
+.FileList__header__admin {
+  color: brown;
+  font-weight: bolder;
+}

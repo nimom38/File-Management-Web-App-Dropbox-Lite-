@@ -150,12 +150,12 @@ function FileCard({ file, setFileList, isAdmin, user }) {
           &nbsp;{isAdmin ? "File Owner:  " + file.username : ""}
         </Typography>
 
-        <br />
+        {file.description && <br />}
         <Typography variant="body1" color="text.primary">
           {file.description}
         </Typography>
 
-        <br />
+        {file.description && <br />}
         <br />
 
         <div className="FileCard__buttons">

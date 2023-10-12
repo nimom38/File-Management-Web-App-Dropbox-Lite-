@@ -4,9 +4,12 @@ const {
   GetObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
-// const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const crypto = require("crypto");
 const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
+const {
+  CloudFrontClient,
+  CreateInvalidationCommand,
+} = require("@aws-sdk/client-cloudfront");
 
 const models = require("../models");
 
@@ -54,14 +57,24 @@ const s3Client = new S3Client({
   },
 });
 
+const cloudfrontDistributionId = "E126KC6RVLZSFI";
+
+const cloudfront = new CloudFrontClient({
+  region: "asdsda",
+  credentials: {
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey,
+  },
+});
+
 const generateFileName = (bytes = 32) =>
   crypto.randomBytes(bytes).toString("hex");
 
-const getFiles = (res, username, userId) => {
+const getFiles = async (res, username, userId, doInvalidation) => {
   if (username === "superAdminUser") {
     models.File.findAll().then(async (files) => {
       for (let file of files) {
-        const signedUrl = await getSignedUrl({
+        const signedUrl = getSignedUrl({
           keyPairId: publicKeyID,
           privateKey: privateKey,
           url: "https://d2adwnxf8luzac.cloudfront.net/" + file.fileURL,
@@ -79,7 +92,7 @@ const getFiles = (res, username, userId) => {
   } else {
     models.File.findAll({ where: { userId: userId } }).then(async (files) => {
       for (let file of files) {
-        const signedUrl = await getSignedUrl({
+        const signedUrl = getSignedUrl({
           keyPairId: publicKeyID,
           privateKey: privateKey,
           url: "https://d2adwnxf8luzac.cloudfront.net/" + file.fileURL,
@@ -102,7 +115,7 @@ async function getFileList(req, res) {
   const username = req.query.username;
   const token = req.query.token;
 
-  getFiles(res, username, userId);
+  getFiles(res, username, userId, false);
 }
 
 async function deleteFile(req, res) {
@@ -119,15 +132,28 @@ async function deleteFile(req, res) {
   try {
     await s3Client.send(new DeleteObjectCommand(deleteParams));
 
+    const cfCommand = new CreateInvalidationCommand({
+      DistributionId: cloudfrontDistributionId,
+      InvalidationBatch: {
+        // CallerReference: fileName + "_" + generateFileName(),
+        CallerReference: generateFileName(),
+        Paths: {
+          Quantity: 1,
+          Items: ["/" + fileName],
+        },
+      },
+    });
+    await cloudfront.send(cfCommand);
+
     models.File.destroy({ where: { fileURL: fileName } })
       .then(() => {
-        getFiles(res, username, userId);
+        getFiles(res, username, userId, true);
       })
       .catch((err) => {
         throw err;
       });
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!" });
+    res.status(500).json({ message: "something went wrong!", err });
   }
 }
 
@@ -152,6 +178,22 @@ async function updateFile(req, res) {
     if (fileBuffer) {
       await s3Client.send(new PutObjectCommand(uploadParams));
     }
+
+    console.log("POPOPOPOPOP");
+
+    const cfCommand = new CreateInvalidationCommand({
+      DistributionId: cloudfrontDistributionId,
+      InvalidationBatch: {
+        // CallerReference: fileName + "_" + generateFileName(),
+        CallerReference: generateFileName(),
+        Paths: {
+          Quantity: 1,
+          Items: ["/" + fileName],
+        },
+      },
+    });
+    await cloudfront.send(cfCommand);
+
     const fileData = {
       fileURL: fileName,
       description: description,
@@ -161,11 +203,12 @@ async function updateFile(req, res) {
 
     models.File.update(fileData, { where: { fileURL: fileName } }).then(
       (result) => {
-        getFiles(res, username, uploaderId);
+        getFiles(res, username, uploaderId, true);
       }
     );
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!" });
+    console.log("saddsadas");
+    res.status(500).json({ message: "something went wrong!", err });
   }
 }
 
@@ -203,7 +246,7 @@ async function uploadFile(req, res) {
     };
 
     models.File.create(fileData).then((result) => {
-      getFiles(res, username, uploaderId);
+      getFiles(res, username, uploaderId, false);
     });
   } catch (err) {
     res.status(500).json({ message: "something went wrong!" });

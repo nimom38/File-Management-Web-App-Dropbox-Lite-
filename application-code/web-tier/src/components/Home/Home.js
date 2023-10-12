@@ -133,7 +133,7 @@ function Home({ user, setUser }) {
         </Box>
       </Modal>
       <div className="Home__userProfile">
-        <h1>Welcome !!</h1>
+        <h2>Welcome !!</h2>
         <br />
         <h3>Your Profile Info: </h3>
         <div className="Home__userProfile_info">

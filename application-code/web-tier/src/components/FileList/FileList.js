@@ -2,13 +2,18 @@ import "./FileList.css";
 import FileCard from "../FileCard/FileCard";
 
 function FileList({ user, fileList, setFileList }) {
-  console.log("file", fileList);
   return (
     <div className="FileList">
-      <h1>
-        {user?.username === "superAdminUser" ? "All files" : "Your files"}
-      </h1>
-      <br />
+      <div className="FileList__header">
+        <h1 className="FileList__header__title">
+          {user?.username === "superAdminUser" ? "All files" : "Your files"}
+        </h1>
+        <p className="FileList__header__admin">
+          {" "}
+          {user?.username === "superAdminUser" ? "Admin Mode" : ""}
+        </p>
+        <br />
+      </div>
 
       {fileList?.files?.toReversed().map((file) => {
         return (
