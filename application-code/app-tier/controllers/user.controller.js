@@ -28,6 +28,8 @@ function signUp(req, res) {
                     userId: result.id,
                   },
                   "secret",
+                  // { expiresIn: "1h" },
+                  { expiresIn: 10 },
                   function (err, token) {
                     const userData = {
                       ...result.dataValues,
@@ -76,6 +78,8 @@ function login(req, res) {
                   userId: user.id,
                 },
                 "secret",
+                // { expiresIn: "1h" },
+                { expiresIn: 10 },
                 function (err, token) {
                   const userData = {
                     ...user.dataValues,

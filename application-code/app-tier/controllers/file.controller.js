@@ -10,6 +10,7 @@ const {
   CloudFrontClient,
   CreateInvalidationCommand,
 } = require("@aws-sdk/client-cloudfront");
+const jwt = require("jsonwebtoken");
 
 const models = require("../models");
 
@@ -115,6 +116,12 @@ async function getFileList(req, res) {
   const username = req.query.username;
   const token = req.query.token;
 
+  jwt.verify(token, "secret", function (err, authorized) {
+    if (err) {
+      res.status(403).json({ message: "unauthorized!" });
+    }
+  });
+
   getFiles(res, username, userId, false);
 }
 
@@ -123,6 +130,12 @@ async function deleteFile(req, res) {
   const username = req.query.username;
   const token = req.query.token;
   const fileName = req.query.fileId;
+
+  jwt.verify(token, "secret", function (err, authorized) {
+    if (err) {
+      res.status(403).json({ message: "unauthorized!" });
+    }
+  });
 
   const deleteParams = {
     Bucket: bucketName,
@@ -158,6 +171,13 @@ async function deleteFile(req, res) {
 }
 
 async function updateFile(req, res) {
+  const token = req.body.token;
+
+  jwt.verify(token, "secret", function (err, authorized) {
+    if (err) {
+      res.status(403).json({ message: "unauthorized!" });
+    }
+  });
   const file = req.file;
 
   const description = req.body.description;
@@ -178,8 +198,6 @@ async function updateFile(req, res) {
     if (fileBuffer) {
       await s3Client.send(new PutObjectCommand(uploadParams));
     }
-
-    console.log("POPOPOPOPOP");
 
     const cfCommand = new CreateInvalidationCommand({
       DistributionId: cloudfrontDistributionId,
@@ -207,12 +225,19 @@ async function updateFile(req, res) {
       }
     );
   } catch (err) {
-    console.log("saddsadas");
     res.status(500).json({ message: "something went wrong!", err });
   }
 }
 
 async function uploadFile(req, res) {
+  const token = req.body.token;
+
+  jwt.verify(token, "secret", function (err, authorized) {
+    if (err) {
+      res.status(403).json({ message: "unauthorized!" });
+    }
+  });
+
   const file = req.file;
 
   if (!file) {
