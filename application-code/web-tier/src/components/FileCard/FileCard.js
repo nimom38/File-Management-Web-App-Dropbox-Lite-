@@ -10,8 +10,18 @@ import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 
 import moment from "moment";
+import jwt_decode from "jwt-decode";
 
-function FileCard({ file, setFileList, isAdmin, user }) {
+function FileCard({ file, setFileList, isAdmin, user, setUser }) {
+  if (user) {
+    const decodedToken = jwt_decode(user?.token);
+    const currentDate = new Date();
+
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      setUser(null);
+    }
+  }
+
   const [modalOpen, setModalOpen] = useState(false);
 
   const style = {
@@ -27,6 +37,15 @@ function FileCard({ file, setFileList, isAdmin, user }) {
   };
 
   const onDelete = () => {
+    if (user) {
+      const decodedToken = jwt_decode(user?.token);
+      const currentDate = new Date();
+
+      if (decodedToken.exp * 1000 < currentDate.getTime()) {
+        setUser(null);
+      }
+    }
+
     axios
       .delete("http://localhost:4000/file/delete", {
         params: {
@@ -137,6 +156,14 @@ function FileCard({ file, setFileList, isAdmin, user }) {
           href="#"
           variant="h5"
           onClick={() => {
+            if (user) {
+              const decodedToken = jwt_decode(user?.token);
+              const currentDate = new Date();
+
+              if (decodedToken.exp * 1000 < currentDate.getTime()) {
+                setUser(null);
+              }
+            }
             window.open(file.downloadLink, "_blank");
           }}
         >

@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 function Home({ user, setUser }) {
   const history = useHistory();
@@ -34,6 +35,15 @@ function Home({ user, setUser }) {
         });
     }
   }, [user, user?.id, user?.token, user?.username]);
+
+  if (user) {
+    const decodedToken = jwt_decode(user?.token);
+    const currentDate = new Date();
+
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      setUser(null);
+    }
+  }
 
   if (!user) {
     history.push("/signin");
@@ -170,7 +180,12 @@ function Home({ user, setUser }) {
       </div>
 
       <div className="Home__files">
-        <FileList user={user} fileList={fileList} setFileList={setFileList} />
+        <FileList
+          user={user}
+          setUser={setUser}
+          fileList={fileList}
+          setFileList={setFileList}
+        />
       </div>
     </div>
   );

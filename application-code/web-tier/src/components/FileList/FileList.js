@@ -1,7 +1,17 @@
 import "./FileList.css";
 import FileCard from "../FileCard/FileCard";
+import jwt_decode from "jwt-decode";
 
-function FileList({ user, fileList, setFileList }) {
+function FileList({ user, setUser, fileList, setFileList }) {
+  if (user) {
+    const decodedToken = jwt_decode(user?.token);
+    const currentDate = new Date();
+
+    if (decodedToken.exp * 1000 < currentDate.getTime()) {
+      setUser(null);
+    }
+  }
+
   return (
     <div className="FileList">
       <div className="FileList__header">
@@ -22,6 +32,7 @@ function FileList({ user, fileList, setFileList }) {
             setFileList={setFileList}
             isAdmin={user?.username === "superAdminUser" ? true : false}
             user={user}
+            setUser={setUser}
           />
         );
       })}
