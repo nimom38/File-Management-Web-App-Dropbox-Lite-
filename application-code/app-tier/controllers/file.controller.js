@@ -274,7 +274,7 @@ async function uploadFile(req, res) {
       getFiles(res, username, uploaderId, false);
     });
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!" });
+    res.status(500).json({ message: "something went wrong!", err });
   }
 }
 
