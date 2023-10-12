@@ -79,7 +79,7 @@ const getFiles = async (res, username, userId, doInvalidation) => {
           keyPairId: publicKeyID,
           privateKey: privateKey,
           url: "https://d2adwnxf8luzac.cloudfront.net/" + file.fileURL,
-          dateLessThan: new Date(Date.now() + 1000 * 60), // 60 secs
+          dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
         });
 
         file.dataValues.downloadLink = signedUrl;
@@ -97,7 +97,7 @@ const getFiles = async (res, username, userId, doInvalidation) => {
           keyPairId: publicKeyID,
           privateKey: privateKey,
           url: "https://d2adwnxf8luzac.cloudfront.net/" + file.fileURL,
-          dateLessThan: new Date(Date.now() + 1000 * 60), // 60 secs
+          dateLessThan: new Date(Date.now() + 1000 * 60 * 60 * 24), // 24 hours
         });
 
         file.dataValues.downloadLink = signedUrl;
