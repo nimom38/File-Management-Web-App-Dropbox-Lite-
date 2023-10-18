@@ -1,6 +1,10 @@
+require("dotenv").config();
+
 const models = require("../models");
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const secret = process.env.secret;
 
 function signUp(req, res) {
   //Sign up
@@ -27,7 +31,7 @@ function signUp(req, res) {
                     username: result.username,
                     userId: result.id,
                   },
-                  "secret",
+                  secret,
                   { expiresIn: "1h" },
                   function (err, token) {
                     const userData = {
@@ -78,7 +82,7 @@ function login(req, res) {
                   username: user.username,
                   userId: user.id,
                 },
-                "secret",
+                secret,
                 { expiresIn: "1h" },
                 function (err, token) {
                   const userData = {
