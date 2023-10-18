@@ -13,6 +13,7 @@ function signUp(req, res) {
       if (result) {
         res.status(409).json({
           message: "username already exists!",
+          cat: "cat",
         });
       } else {
         bcryptjs.genSalt(10, function (err, salt) {
@@ -42,6 +43,7 @@ function signUp(req, res) {
                     res.status(201).json({
                       message: "User created successfully!",
                       user: userData,
+                      cat: "cat",
                     });
                   }
                 );
@@ -50,6 +52,7 @@ function signUp(req, res) {
                 res.status(500).json({
                   message: "Something went wrong!",
                   error,
+                  cat: "cat",
                 });
               });
           });
@@ -60,6 +63,7 @@ function signUp(req, res) {
       res.status(500).json({
         message: "Something went wrong!",
         error,
+        cat: "cat",
       });
     });
 }
@@ -70,6 +74,7 @@ function login(req, res) {
       if (user === null) {
         res.status(401).json({
           message: "Invalid credentials!",
+          cat: "cat",
         });
       } else {
         bcryptjs.compare(
@@ -93,12 +98,14 @@ function login(req, res) {
                   res.status(200).json({
                     message: "Authentication successful!",
                     user: userData,
+                    cat: "cat",
                   });
                 }
               );
             } else {
               res.status(401).json({
                 message: "Invalid credentials!",
+                cat: "cat",
               });
             }
           }
@@ -109,6 +116,7 @@ function login(req, res) {
       res.status(500).json({
         message: "Something went wrong!",
         error,
+        cat: "cat",
       });
     });
 }

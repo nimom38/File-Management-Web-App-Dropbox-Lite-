@@ -67,6 +67,7 @@ const getFiles = async (res, username, userId, doInvalidation) => {
       res.status(200).json({
         message: "success upload",
         files: files,
+        cat: "cat",
       });
     });
   } else {
@@ -85,6 +86,7 @@ const getFiles = async (res, username, userId, doInvalidation) => {
       res.status(200).json({
         message: "success upload",
         files: files,
+        cat: "cat",
       });
     });
   }
@@ -97,7 +99,7 @@ async function getFileList(req, res) {
 
   jwt.verify(token, secret, function (err, authorized) {
     if (err) {
-      res.status(403).json({ message: "unauthorized!" });
+      res.status(403).json({ message: "unauthorized!", cat: "cat", err });
     }
   });
 
@@ -112,7 +114,7 @@ async function deleteFile(req, res) {
 
   jwt.verify(token, secret, function (err, authorized) {
     if (err) {
-      res.status(403).json({ message: "unauthorized!" });
+      res.status(403).json({ message: "unauthorized!", cat: "cat", err });
     }
   });
 
@@ -145,7 +147,7 @@ async function deleteFile(req, res) {
         throw err;
       });
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!", err });
+    res.status(500).json({ message: "something went wrong!", err, cat: "cat" });
   }
 }
 
@@ -154,7 +156,7 @@ async function updateFile(req, res) {
 
   jwt.verify(token, secret, function (err, authorized) {
     if (err) {
-      res.status(403).json({ message: "unauthorized!" });
+      res.status(403).json({ message: "unauthorized!", err, cat: "cat" });
     }
   });
   const file = req.file;
@@ -204,7 +206,7 @@ async function updateFile(req, res) {
       }
     );
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!", err });
+    res.status(500).json({ message: "something went wrong!", err, cat: "cat" });
   }
 }
 
@@ -213,14 +215,14 @@ async function uploadFile(req, res) {
 
   jwt.verify(token, secret, function (err, authorized) {
     if (err) {
-      res.status(403).json({ message: "unauthorized!" });
+      res.status(403).json({ message: "unauthorized!", err, cat: "cat" });
     }
   });
 
   const file = req.file;
 
   if (!file) {
-    res.status(500).json({ message: "Please select a file" });
+    res.status(500).json({ message: "Please select a file", cat: "cat" });
   }
 
   const description = req.body.description;
@@ -253,7 +255,7 @@ async function uploadFile(req, res) {
       getFiles(res, username, uploaderId, false);
     });
   } catch (err) {
-    res.status(500).json({ message: "something went wrong!", err });
+    res.status(500).json({ message: "something went wrong!", err, cat: "cat" });
   }
 }
 
